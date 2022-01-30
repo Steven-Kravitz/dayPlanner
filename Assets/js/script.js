@@ -15,6 +15,9 @@ var presentDOM = moment().format('Do');
 $('#currentDay').text(presentDOW + ', ' + presentMonth + ' ' + presentDOM);
 
 // Create timeblock x 10 (8am - 6pm), you need a space on left for time of day, middle note area, a submit button on right to save text
+// Reference container
+    var plannerContainer = $('.container')
+    // plannerContainer.text('test')
 
 // Create multiple row. Using a for loop using current hour so it aligns with Moment
 for (var hour = 8; hour <= 18; hour++) {
@@ -35,4 +38,13 @@ for (var hour = 8; hour <= 18; hour++) {
         hourTOD = hour;
         amPM = "am";
     }
+
+    // Build time of day location on main row
+    var timeRowSize = $('<div>')
+    timeRowSize.addClass('col-md-2')
+    var timeRow = $('span')
+    timeRow.addClass('timeRow')
+    timeRow.text($hourTOD, $amPM)
+
+    
 }

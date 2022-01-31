@@ -24,9 +24,10 @@ for (var hour = 8; hour <= 18; hour++) {
     var hIndex = hour - 8;
 
     // Build the row base
-    $('<div>').addClass('row');
-    $('<div>').addClass('planRow');
-    $('<div>').attr('hIndex', hour);
+    var rowDiv = $('<div>')
+    rowDiv.addClass('row');
+    rowDiv.addClass('planRow');
+    rowDiv.attr('hIndex', hour);
 
     // Build time of day part of row
     var hourTOD = 0;
@@ -39,12 +40,58 @@ for (var hour = 8; hour <= 18; hour++) {
         amPM = "am";
     }
 
-    // Build time of day location on main row
+    // Build time of day location
     var timeRowSize = $('<div>')
-    timeRowSize.addClass('col-md-2')
-    var timeRow = $('span')
-    timeRow.addClass('timeRow')
-    timeRow.text($hourTOD, $amPM)
+    timeRowSize.addClass('col-md-2 hour time-block')
+    var timeRow = $('<span>')
 
-    
+    timeRow.text(hourTOD + amPM)
+    //Append to row base
+    rowDiv.append(timeRowSize);
+    timeRowSize.append(timeRow);
+
+
+    //build middle note area. Local Storage is needed for this
+    var storedNotes = JSON.parse(localStorage.getItem("storedNotes"))
+    // console.log(storedNotes)
+    if (storedNotes !== null){
+        noteArray = storedNotes
+    } else {
+        //input something into local storage to help page populate
+        noteArray = new Array(10)
+        noteArray[0] = "Enter your daily plans here"
+    }
+
+    var noteArea = $('<textarea>');
+    noteArea.attr('id','index-' + hIndex);
+    noteArea.attr('hIndex', hIndex);
+    noteArea.attr('type', 'text');
+    noteArea.addClass('noteArea')
+
+    // Pull correct item from local storage based on array position
+    noteArea.val(noteArray[hIndex]);
+
+    // Build middle note area location
+    var noteAreaSize = $('<div>')
+    noteAreaSize.addClass('col-md-9')
+
+    // Append to row base
+    rowDiv.append(noteAreaSize)
+    noteAreaSize.append(noteArea)
+
+    // Build save area.
+    var saveArea = $('<div>')
+    saveArea.addClass('col-md-1 saveBtn')
+
+    var saveBtn = $('<i>')
+    saveBtn.attr('id', 'saveid-' + hIndex)
+    saveBtn.attr('save-id', hIndex)
+    saveBtn.addClass('fa-solid fa-floppy-disk')
+
+    // Append to row base
+    rowDiv.append(saveArea)
+    saveArea.append(saveBtn)
+
+    // Append row base to container
+    plannerContainer.append(rowDiv)
 }

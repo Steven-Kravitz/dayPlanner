@@ -66,7 +66,7 @@ for (var hour = 8; hour <= 18; hour++) {
     noteArea.attr('id','index-' + hIndex);
     noteArea.attr('hIndex', hIndex);
     noteArea.attr('type', 'text');
-    noteArea.addClass('noteArea')
+    noteArea.addClass('noteArea description')
 
     // Pull correct item from local storage based on array position
     noteArea.val(noteArray[hIndex]);
@@ -86,7 +86,7 @@ for (var hour = 8; hour <= 18; hour++) {
     var saveBtn = $('<i>')
     saveBtn.attr('id', 'saveid-' + hIndex)
     saveBtn.attr('save-id', hIndex)
-    saveBtn.addClass('fa-solid fa-floppy-disk')
+    saveBtn.attr('class','fa fa-save floppy-disk');
 
     // Append to row base
     rowDiv.append(saveArea)
@@ -94,4 +94,32 @@ for (var hour = 8; hour <= 18; hour++) {
 
     // Append row base to container
     plannerContainer.append(rowDiv)
+
+    // Changes row color based on current hour
+    changeRowColor(rowDiv, hour)
 }
+
+// Adds class to note area to indicate what time of day it is through color
+function changeRowColor() {
+    if (hour < moment().format('H')){
+        noteAreaSize.addClass('past')
+    } else if (hour > moment().format('H')){
+        noteAreaSize.addClass('present')
+    } else {
+        noteAreaSize.addClass('future')
+    }
+
+}
+
+// adds local storage saving
+
+$(document).on('click', 'i', function(event) {
+    event.preventDefault()
+
+    var saveIndex = $(this).attr('save-id')
+    var inputIndex = '#index-' + saveIndex
+    var indexValue = $(inputIndex).val()
+    
+    noteArray[saveIndex] = indexValue
+    localStorage.setItem("storedNotes", JSON.stringify(noteArray))
+})
